@@ -1,4 +1,4 @@
-﻿// LAST UPDATED DATE : 28/03/2025
+﻿// LAST UPDATED DATE : 10/04/2025
 
 namespace DesignPatternsProject.Scripts.DesignPatterns.Structural.Composite
 {
@@ -10,13 +10,21 @@ namespace DesignPatternsProject.Scripts.DesignPatterns.Structural.Composite
     {
         private IEnumerable<FilterComponent<Template1>> CompositeFilterFieldCollection { get; }
 
-        private CompositeFilter() : base()
-        {
-
-        }
-
         public CompositeFilter(in IEnumerable<FilterComponent<Template1>> compositeFilterFieldCollection) : base()
         {
+            if (compositeFilterFieldCollection is null)
+            {
+                StringBuilder compositeFilterStringBuilder = new();
+
+                compositeFilterStringBuilder.Append(value: $"[START]{nameof(CompositeFilter<Template1>)}[START]");
+                compositeFilterStringBuilder.AppendLine(value: string.Empty);
+                compositeFilterStringBuilder.Append(value: $"There was an issue in '{nameof(CompositeFilter<Template1>)}' class");
+                compositeFilterStringBuilder.AppendLine(value: string.Empty);
+                compositeFilterStringBuilder.Append(value: $"[END]{nameof(CompositeFilter<Template1>)}[END]");
+
+                throw new InvalidOperationException(message: compositeFilterStringBuilder.ToString(), innerException: new Exception());
+            }
+
             CompositeFilterFieldCollection = compositeFilterFieldCollection;
         }
 
@@ -72,7 +80,7 @@ namespace DesignPatternsProject.Scripts.DesignPatterns.Structural.Composite
             return true;
         }
 
-        public override bool Equals(object uncastedCompositeFilter)
+        public override bool Equals(object? uncastedCompositeFilter)
         {
             StringBuilder compositeFilterStringBuilder = new();
 

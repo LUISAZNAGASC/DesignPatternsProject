@@ -1,4 +1,4 @@
-﻿// LAST UPDATED DATE : 28/03/2025
+﻿// LAST UPDATED DATE : 10/04/2025
 
 namespace DesignPatternsProject.Scripts.DesignPatterns.Creational.Builder
 {
@@ -14,7 +14,7 @@ namespace DesignPatternsProject.Scripts.DesignPatterns.Creational.Builder
 
         public Template1 SetConsumableBuilderHeightInput(in ProductSize consumableBuilderHeightInput)
         {
-            if (ConsumableBuilderOriginInstance is null)
+            if (ConsumableBuilderSourceInstance is null)
             {
                 StringBuilder consumableBuilderHeightStringBuilder = new();
 
@@ -27,12 +27,19 @@ namespace DesignPatternsProject.Scripts.DesignPatterns.Creational.Builder
                 throw new InvalidOperationException(message: consumableBuilderHeightStringBuilder.ToString(), innerException: new Exception());
             }
 
-            ConsumableBuilderOriginInstance.SetProductComponentHeight(productComponentHeight: consumableBuilderHeightInput);
+            if (!Enum.IsDefined(value: consumableBuilderHeightInput))
+            {
+                ConsumableBuilderSourceInstance.SetProductComponentHeight(productComponentHeight: ProductSize.ProductSizeUndefined);
+            }
+            else
+            {
+                ConsumableBuilderSourceInstance.SetProductComponentHeight(productComponentHeight: consumableBuilderHeightInput);
+            }
 
             return (Template1)this;
         }
 
-        public override bool Equals(object uncastedConsumableBuilderHeight)
+        public override bool Equals(object? uncastedConsumableBuilderHeight)
         {
             StringBuilder consumableBuilderHeightStringBuilder = new();
 

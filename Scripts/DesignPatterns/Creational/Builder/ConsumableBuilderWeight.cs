@@ -1,4 +1,4 @@
-﻿// LAST UPDATED DATE : 28/03/2025
+﻿// LAST UPDATED DATE : 10/04/2025
 
 namespace DesignPatternsProject.Scripts.DesignPatterns.Creational.Builder
 {
@@ -14,7 +14,7 @@ namespace DesignPatternsProject.Scripts.DesignPatterns.Creational.Builder
 
         public Template1 SetConsumableBuilderWeightInput(in ProductWeight consumableBuilderWeightInput)
         {
-            if (ConsumableBuilderOriginInstance is null)
+            if (ConsumableBuilderSourceInstance is null)
             {
                 StringBuilder consumableBuilderWeightStringBuilder = new();
 
@@ -27,12 +27,19 @@ namespace DesignPatternsProject.Scripts.DesignPatterns.Creational.Builder
                 throw new InvalidOperationException(message: consumableBuilderWeightStringBuilder.ToString(), innerException: new Exception());
             }
 
-            ConsumableBuilderOriginInstance.SetProductComponentWeight(productComponentWeight: consumableBuilderWeightInput);
+            if (!Enum.IsDefined(value: consumableBuilderWeightInput))
+            {
+                ConsumableBuilderSourceInstance.SetProductComponentWeight(productComponentWeight: ProductWeight.ProductWeightUndefined);
+            }
+            else
+            {
+                ConsumableBuilderSourceInstance.SetProductComponentWeight(productComponentWeight: consumableBuilderWeightInput);
+            }
 
             return (Template1)this;
         }
 
-        public override bool Equals(object uncastedConsumableBuilderWeight)
+        public override bool Equals(object? uncastedConsumableBuilderWeight)
         {
             StringBuilder consumableBuilderWeightStringBuilder = new();
 

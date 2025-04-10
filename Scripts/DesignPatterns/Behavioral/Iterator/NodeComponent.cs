@@ -1,7 +1,8 @@
-﻿// LAST UPDATED DATE : 28/03/2025
+﻿// LAST UPDATED DATE : 10/04/2025
 
 namespace DesignPatternsProject.Scripts.DesignPatterns.Behavioral.Iterator
 {
+    using System;
     using System.Collections.Generic;
     using System.Text;
 
@@ -9,19 +10,27 @@ namespace DesignPatternsProject.Scripts.DesignPatterns.Behavioral.Iterator
     {
         public Template1 NodeComponentValue { get; private set; }
 
-        public NodeComponent<Template1> NodeComponentParent { get; private set; }
+        public NodeComponent<Template1>? NodeComponentParent { get; private set; }
 
-        public NodeComponent<Template1> NodeComponentLeft { get; private set; }
+        public NodeComponent<Template1>? NodeComponentLeft { get; private set; }
 
-        public NodeComponent<Template1> NodeComponentRight { get; private set; }
-
-        private NodeComponent() : base()
-        {
-
-        }
+        public NodeComponent<Template1>? NodeComponentRight { get; private set; }
 
         public NodeComponent(in Template1 nodeComponentValue) : base()
         {
+            if (nodeComponentValue is null)
+            {
+                StringBuilder nodeComponentStringBuilder = new();
+
+                nodeComponentStringBuilder.Append(value: $"[START]{nameof(NodeComponent<Template1>)}[START]");
+                nodeComponentStringBuilder.AppendLine(value: string.Empty);
+                nodeComponentStringBuilder.Append(value: $"There was an issue in '{nameof(NodeComponent<Template1>)}' class");
+                nodeComponentStringBuilder.AppendLine(value: string.Empty);
+                nodeComponentStringBuilder.Append(value: $"[END]{nameof(NodeComponent<Template1>)}[END]");
+
+                throw new InvalidOperationException(message: nodeComponentStringBuilder.ToString(), innerException: new Exception());
+            }
+
             NodeComponentValue = nodeComponentValue;
 
             NodeComponentParent = null;
@@ -33,6 +42,19 @@ namespace DesignPatternsProject.Scripts.DesignPatterns.Behavioral.Iterator
 
         public NodeComponent(in Template1 nodeComponentValue, in NodeComponent<Template1> nodeComponentLeft, in NodeComponent<Template1> nodeComponentRight) : base()
         {
+            if (nodeComponentValue is null)
+            {
+                StringBuilder nodeComponentStringBuilder = new();
+
+                nodeComponentStringBuilder.Append(value: $"[START]{nameof(NodeComponent<Template1>)}[START]");
+                nodeComponentStringBuilder.AppendLine(value: string.Empty);
+                nodeComponentStringBuilder.Append(value: $"There was an issue in '{nameof(NodeComponent<Template1>)}' class");
+                nodeComponentStringBuilder.AppendLine(value: string.Empty);
+                nodeComponentStringBuilder.Append(value: $"[END]{nameof(NodeComponent<Template1>)}[END]");
+
+                throw new InvalidOperationException(message: nodeComponentStringBuilder.ToString(), innerException: new Exception());
+            }
+
             NodeComponentValue = nodeComponentValue;
 
             NodeComponentParent = null;
@@ -52,28 +74,7 @@ namespace DesignPatternsProject.Scripts.DesignPatterns.Behavioral.Iterator
             }
         }
 
-        public bool TryNodeComponentParentIsNotNull(out NodeComponent<Template1> nodeComponentParent)
-        {
-            nodeComponentParent = NodeComponentParent;
-
-            return nodeComponentParent is not null;
-        }
-
-        public bool TryNodeComponentLeftIsNotNull(out NodeComponent<Template1> nodeComponentLeft)
-        {
-            nodeComponentLeft = NodeComponentLeft;
-
-            return nodeComponentLeft is not null;
-        }
-
-        public bool TryNodeComponentRightIsNotNull(out NodeComponent<Template1> nodeComponentRight)
-        {
-            nodeComponentRight = NodeComponentRight;
-
-            return nodeComponentRight is not null;
-        }
-
-        public override bool Equals(object uncastedNodeComponent)
+        public override bool Equals(object? uncastedNodeComponent)
         {
             if (ReferenceEquals(objA: this, objB: uncastedNodeComponent))
             {

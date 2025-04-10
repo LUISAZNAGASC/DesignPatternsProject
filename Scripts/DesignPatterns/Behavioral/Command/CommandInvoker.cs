@@ -1,4 +1,4 @@
-﻿// LAST UPDATED DATE : 28/03/2025
+﻿// LAST UPDATED DATE : 10/04/2025
 
 namespace DesignPatternsProject.Scripts.DesignPatterns.Behavioral.Command
 {
@@ -69,7 +69,7 @@ namespace DesignPatternsProject.Scripts.DesignPatterns.Behavioral.Command
                 throw new InvalidOperationException(message: commandInvokerStringBuilder.ToString(), innerException: new Exception());
             }
 
-            if (!CommandInvokerUndoCollection.TryPop(result: out CommandComponent<Template1> commandInvokerCommandComponent))
+            if (!CommandInvokerUndoCollection.TryPop(result: out CommandComponent<Template1>? commandInvokerCommandComponent))
             {
                 return false;
             }
@@ -109,7 +109,7 @@ namespace DesignPatternsProject.Scripts.DesignPatterns.Behavioral.Command
                 throw new InvalidOperationException(message: commandInvokerStringBuilder.ToString(), innerException: new Exception());
             }
 
-            if (!CommandInvokerRedoCollection.TryPop(result: out CommandComponent<Template1> commandInvokerCommandComponent))
+            if (!CommandInvokerRedoCollection.TryPop(result: out CommandComponent<Template1>? commandInvokerCommandComponent))
             {
                 return false;
             }
@@ -134,7 +134,7 @@ namespace DesignPatternsProject.Scripts.DesignPatterns.Behavioral.Command
             return true;
         }
 
-        public override bool Equals(object uncastedCommandInvoker)
+        public override bool Equals(object? uncastedCommandInvoker)
         {
             StringBuilder commandInvokerStringBuilder = new();
 

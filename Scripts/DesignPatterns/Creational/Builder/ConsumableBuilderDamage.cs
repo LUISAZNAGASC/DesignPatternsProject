@@ -1,4 +1,4 @@
-﻿// LAST UPDATED DATE : 28/03/2025
+﻿// LAST UPDATED DATE : 10/04/2025
 
 namespace DesignPatternsProject.Scripts.DesignPatterns.Creational.Builder
 {
@@ -14,7 +14,7 @@ namespace DesignPatternsProject.Scripts.DesignPatterns.Creational.Builder
 
         public Template1 SetConsumableBuilderDamageInput(in ConsumableEffect consumableBuilderDamageInput)
         {
-            if (ConsumableBuilderOriginInstance is null)
+            if (ConsumableBuilderSourceInstance is null)
             {
                 StringBuilder consumableBuilderDamageStringBuilder = new();
 
@@ -27,12 +27,19 @@ namespace DesignPatternsProject.Scripts.DesignPatterns.Creational.Builder
                 throw new InvalidOperationException(message: consumableBuilderDamageStringBuilder.ToString(), innerException: new Exception());
             }
 
-            ConsumableBuilderOriginInstance.SetConsumableComponentDamage(consumableComponentDamage: consumableBuilderDamageInput);
+            if (!Enum.IsDefined(value: consumableBuilderDamageInput))
+            {
+                ConsumableBuilderSourceInstance.SetConsumableComponentDamage(consumableComponentDamage: ConsumableEffect.ConsumableEffectUndefined);
+            }
+            else
+            {
+                ConsumableBuilderSourceInstance.SetConsumableComponentDamage(consumableComponentDamage: consumableBuilderDamageInput);
+            }
 
             return (Template1)this;
         }
 
-        public override bool Equals(object uncastedConsumableBuilderDamage)
+        public override bool Equals(object? uncastedConsumableBuilderDamage)
         {
             StringBuilder consumableBuilderDamageStringBuilder = new();
 

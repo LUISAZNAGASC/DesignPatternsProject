@@ -1,4 +1,4 @@
-﻿// LAST UPDATED DATE : 28/03/2025
+﻿// LAST UPDATED DATE : 10/04/2025
 
 namespace DesignPatternsProject.Scripts.DesignPatterns.Behavioral.Command
 {
@@ -11,16 +11,31 @@ namespace DesignPatternsProject.Scripts.DesignPatterns.Behavioral.Command
 
         private ProductSize ConsumableCommandHeightRedoValue { get; }
 
-        private ConsumableCommandHeight() : base()
-        {
-
-        }
-
         public ConsumableCommandHeight(in ConsumableComponent consumableCommandHeightReference, in ProductSize consumableCommandHeightRedoValue) : base(commandComponentReference: consumableCommandHeightReference)
         {
-            ConsumableCommandHeightRedoValue = consumableCommandHeightRedoValue;
+            if (consumableCommandHeightReference is null)
+            {
+                StringBuilder consumableCommandHeightStringBuilder = new();
 
-            ConsumableCommandHeightUndoValue = CommandComponentReference.ProductComponentHeight;
+                consumableCommandHeightStringBuilder.Append(value: $"[START]{nameof(ConsumableCommandHeight)}[START]");
+                consumableCommandHeightStringBuilder.AppendLine(value: string.Empty);
+                consumableCommandHeightStringBuilder.Append(value: $"There was an issue in '{nameof(ConsumableCommandHeight)}' class");
+                consumableCommandHeightStringBuilder.AppendLine(value: string.Empty);
+                consumableCommandHeightStringBuilder.Append(value: $"[END]{nameof(ConsumableCommandHeight)}[END]");
+
+                throw new InvalidOperationException(message: consumableCommandHeightStringBuilder.ToString(), innerException: new Exception());
+            }
+
+            ConsumableCommandHeightUndoValue = consumableCommandHeightReference.ProductComponentHeight;
+
+            if (!Enum.IsDefined(value: consumableCommandHeightRedoValue))
+            {
+                ConsumableCommandHeightRedoValue = ProductSize.ProductSizeUndefined;
+            }
+            else
+            {
+                ConsumableCommandHeightRedoValue = consumableCommandHeightRedoValue;
+            }
         }
 
         public override void ExecuteCommandComponentUndoOperation()
@@ -59,7 +74,7 @@ namespace DesignPatternsProject.Scripts.DesignPatterns.Behavioral.Command
             CommandComponentReference.SetProductComponentHeight(productComponentHeight: ConsumableCommandHeightRedoValue);
         }
 
-        public override bool Equals(object uncastedConsumableCommandHeight)
+        public override bool Equals(object? uncastedConsumableCommandHeight)
         {
             StringBuilder consumableCommandHeightStringBuilder = new();
 

@@ -1,4 +1,4 @@
-﻿// LAST UPDATED DATE : 28/03/2025
+﻿// LAST UPDATED DATE : 10/04/2025
 
 namespace DesignPatternsProject.Scripts.DesignPatterns.Behavioral.Command
 {
@@ -11,16 +11,31 @@ namespace DesignPatternsProject.Scripts.DesignPatterns.Behavioral.Command
 
         private ProductWeight ConsumableCommandWeightRedoValue { get; }
 
-        private ConsumableCommandWeight() : base()
-        {
-
-        }
-
         public ConsumableCommandWeight(in ConsumableComponent consumableCommandWeightReference, in ProductWeight consumableCommandWeightRedoValue) : base(commandComponentReference: consumableCommandWeightReference)
         {
-            ConsumableCommandWeightRedoValue = consumableCommandWeightRedoValue;
+            if (consumableCommandWeightReference is null)
+            {
+                StringBuilder consumableCommandWeightStringBuilder = new();
 
-            ConsumableCommandWeightUndoValue = CommandComponentReference.ProductComponentWeight;
+                consumableCommandWeightStringBuilder.Append(value: $"[START]{nameof(ConsumableCommandWeight)}[START]");
+                consumableCommandWeightStringBuilder.AppendLine(value: string.Empty);
+                consumableCommandWeightStringBuilder.Append(value: $"There was an issue in '{nameof(ConsumableCommandWeight)}' class");
+                consumableCommandWeightStringBuilder.AppendLine(value: string.Empty);
+                consumableCommandWeightStringBuilder.Append(value: $"[END]{nameof(ConsumableCommandWeight)}[END]");
+
+                throw new InvalidOperationException(message: consumableCommandWeightStringBuilder.ToString(), innerException: new Exception());
+            }
+
+            ConsumableCommandWeightUndoValue = consumableCommandWeightReference.ProductComponentWeight;
+
+            if (!Enum.IsDefined(value: consumableCommandWeightRedoValue))
+            {
+                ConsumableCommandWeightRedoValue = ProductWeight.ProductWeightUndefined;
+            }
+            else
+            {
+                ConsumableCommandWeightRedoValue = consumableCommandWeightRedoValue;
+            }
         }
 
         public override void ExecuteCommandComponentUndoOperation()
@@ -59,7 +74,7 @@ namespace DesignPatternsProject.Scripts.DesignPatterns.Behavioral.Command
             CommandComponentReference.SetProductComponentWeight(productComponentWeight: ConsumableCommandWeightRedoValue);
         }
 
-        public override bool Equals(object uncastedConsumableCommandWeight)
+        public override bool Equals(object? uncastedConsumableCommandWeight)
         {
             StringBuilder consumableCommandWeightStringBuilder = new();
 

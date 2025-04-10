@@ -1,4 +1,4 @@
-﻿// LAST UPDATED DATE : 28/03/2025
+﻿// LAST UPDATED DATE : 10/04/2025
 
 namespace DesignPatternsProject.Scripts.DesignPatterns.Behavioral.Command
 {
@@ -11,16 +11,31 @@ namespace DesignPatternsProject.Scripts.DesignPatterns.Behavioral.Command
 
         private ConsumableEffect ConsumableCommandDamageRedoValue { get; }
 
-        private ConsumableCommandDamage() : base()
-        {
-
-        }
-
         public ConsumableCommandDamage(in ConsumableComponent consumableCommandDamageReference, in ConsumableEffect consumableCommandDamageRedoValue) : base(commandComponentReference: consumableCommandDamageReference)
         {
-            ConsumableCommandDamageRedoValue = consumableCommandDamageRedoValue;
+            if (consumableCommandDamageReference is null)
+            {
+                StringBuilder consumableCommandDamageStringBuilder = new();
 
-            ConsumableCommandDamageUndoValue = CommandComponentReference.ConsumableComponentDamage;
+                consumableCommandDamageStringBuilder.Append(value: $"[START]{nameof(ConsumableCommandDamage)}[START]");
+                consumableCommandDamageStringBuilder.AppendLine(value: string.Empty);
+                consumableCommandDamageStringBuilder.Append(value: $"There was an issue in '{nameof(ConsumableCommandDamage)}' class");
+                consumableCommandDamageStringBuilder.AppendLine(value: string.Empty);
+                consumableCommandDamageStringBuilder.Append(value: $"[END]{nameof(ConsumableCommandDamage)}[END]");
+
+                throw new InvalidOperationException(message: consumableCommandDamageStringBuilder.ToString(), innerException: new Exception());
+            }
+
+            ConsumableCommandDamageUndoValue = consumableCommandDamageReference.ConsumableComponentDamage;
+
+            if (!Enum.IsDefined(value: consumableCommandDamageRedoValue))
+            {
+                ConsumableCommandDamageRedoValue = ConsumableEffect.ConsumableEffectUndefined;
+            }
+            else
+            {
+                ConsumableCommandDamageRedoValue = consumableCommandDamageRedoValue;
+            }
         }
 
         public override void ExecuteCommandComponentUndoOperation()
@@ -59,7 +74,7 @@ namespace DesignPatternsProject.Scripts.DesignPatterns.Behavioral.Command
             CommandComponentReference.SetConsumableComponentDamage(consumableComponentDamage: ConsumableCommandDamageRedoValue);
         }
 
-        public override bool Equals(object uncastedConsumableCommandDamage)
+        public override bool Equals(object? uncastedConsumableCommandDamage)
         {
             StringBuilder consumableCommandDamageStringBuilder = new();
 

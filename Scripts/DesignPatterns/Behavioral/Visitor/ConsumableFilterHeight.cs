@@ -1,12 +1,12 @@
 ﻿// LAST UPDATED DATE : 10/04/2025
 
-namespace DesignPatternsProject.Scripts.DesignPatterns.Structural.Composite
+namespace DesignPatternsProject.Scripts.DesignPatterns.Behavioral.Visitor
 {
     using System;
     using System.Collections.Generic;
     using System.Text;
 
-    public sealed class ConsumableFilterHeight : FilterComponent<ConsumableComponent>
+    public sealed class ConsumableFilterHeight : FilterComponent<ConsumableComponent, ConsumableFilterVisitor>
     {
         private ProductSize ConsumableFilterHeightField { get; }
 
@@ -38,6 +38,24 @@ namespace DesignPatternsProject.Scripts.DesignPatterns.Structural.Composite
             }
 
             return EqualityComparer<ProductSize>.Default.Equals(x: ConsumableFilterHeightField, y: consumableFilterHeightInput.ProductComponentHeight);
+        }
+
+        public override void AcceptFilterComponent(in ConsumableFilterVisitor consumableFilterHeightVisitor)
+        {
+            if (consumableFilterHeightVisitor is null)
+            {
+                StringBuilder consumableFilterHeightStringBuilder = new();
+
+                consumableFilterHeightStringBuilder.Append(value: $"[START]{nameof(ConsumableFilterHeight)}[START]");
+                consumableFilterHeightStringBuilder.AppendLine(value: string.Empty);
+                consumableFilterHeightStringBuilder.Append(value: $"There was an issue in '{nameof(ConsumableFilterHeight)}' class");
+                consumableFilterHeightStringBuilder.AppendLine(value: string.Empty);
+                consumableFilterHeightStringBuilder.Append(value: $"[END]{nameof(ConsumableFilterHeight)}[END]");
+
+                throw new InvalidOperationException(message: consumableFilterHeightStringBuilder.ToString(), innerException: new Exception());
+            }
+
+            consumableFilterHeightVisitor.ExecuteFilterVisitorOperation(consumableFilterVisitorElement: this);
         }
 
         public override bool Equals(object? uncastedConsumableFilterHeight)

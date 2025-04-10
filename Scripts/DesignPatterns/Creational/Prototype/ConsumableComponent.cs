@@ -1,4 +1,4 @@
-﻿// LAST UPDATED DATE : 28/03/2025
+﻿// LAST UPDATED DATE : 10/04/2025
 
 namespace DesignPatternsProject.Scripts.DesignPatterns.Creational.Prototype
 {
@@ -8,7 +8,7 @@ namespace DesignPatternsProject.Scripts.DesignPatterns.Creational.Prototype
 
     public enum ConsumableEffect : uint
     {
-        ConsumableEffectNone = 0, ConsumableEffectEmpty = 1, ConsumableEffectLow = 2, ConsumableEffectMiddle = 3, ConsumableEffectHigh = 4, ConsumableEffectFull = 5
+        ConsumableEffectUndefined = 0, ConsumableEffectEmpty = 1, ConsumableEffectLow = 2, ConsumableEffectMiddle = 3, ConsumableEffectHigh = 4, ConsumableEffectFull = 5
     }
 
     public sealed class ConsumableComponent : ProductComponent, IPrototypeComponent<ConsumableComponent>
@@ -19,43 +19,77 @@ namespace DesignPatternsProject.Scripts.DesignPatterns.Creational.Prototype
 
         public ConsumableComponent() : base()
         {
-            SetConsumableComponentHealth(consumableComponentHealth: ConsumableEffect.ConsumableEffectNone);
+            ConsumableComponentHealth = ConsumableEffect.ConsumableEffectUndefined;
 
-            SetConsumableComponentDamage(consumableComponentDamage: ConsumableEffect.ConsumableEffectNone);
+            ConsumableComponentDamage = ConsumableEffect.ConsumableEffectUndefined;
         }
 
-        public ConsumableComponent(in string consumableComponentName, in ProductSize consumableComponentWidth, in ProductSize consumableComponentHeight, in ProductSize consumableComponentDepth, in ProductWeight consumableComponentWeight, in ConsumableEffect consumableComponentHealth, in ConsumableEffect consumableComponentDamage) : base(productComponentName: consumableComponentName, productComponentWidth: consumableComponentWidth, productComponentHeight: consumableComponentHeight, productComponentDepth: consumableComponentDepth, productComponentWeight: consumableComponentWeight)
+        public ConsumableComponent(in ProductSize consumableComponentWidth, in ProductSize consumableComponentHeight, in ProductSize consumableComponentDepth, in ProductWeight consumableComponentWeight, in ConsumableEffect consumableComponentHealth, in ConsumableEffect consumableComponentDamage) : base(productComponentWidth: consumableComponentWidth, productComponentHeight: consumableComponentHeight, productComponentDepth: consumableComponentDepth, productComponentWeight: consumableComponentWeight)
         {
-            SetConsumableComponentHealth(consumableComponentHealth: consumableComponentHealth);
+            if (!Enum.IsDefined(value: consumableComponentHealth))
+            {
+                ConsumableComponentHealth = ConsumableEffect.ConsumableEffectUndefined;
+            }
+            else
+            {
+                ConsumableComponentHealth = consumableComponentHealth;
+            }
 
-            SetConsumableComponentDamage(consumableComponentDamage: consumableComponentDamage);
+            if (!Enum.IsDefined(value: consumableComponentDamage))
+            {
+                ConsumableComponentDamage = ConsumableEffect.ConsumableEffectUndefined;
+            }
+            else
+            {
+                ConsumableComponentDamage = consumableComponentDamage;
+            }
         }
 
         public void SetConsumableComponentHealth(in ConsumableEffect consumableComponentHealth)
         {
-            if (!Enum.IsDefined(value: consumableComponentHealth) || consumableComponentHealth == ConsumableEffect.ConsumableEffectNone)
+            if (!Enum.IsDefined(value: consumableComponentHealth))
             {
-                ConsumableComponentHealth = ConsumableEffect.ConsumableEffectNone;
-
-                return;
+                ConsumableComponentHealth = ConsumableEffect.ConsumableEffectUndefined;
             }
-
-            ConsumableComponentHealth = consumableComponentHealth;
+            else
+            {
+                ConsumableComponentHealth = consumableComponentHealth;
+            }
         }
 
         public void SetConsumableComponentDamage(in ConsumableEffect consumableComponentDamage)
         {
-            if (!Enum.IsDefined(value: consumableComponentDamage) || consumableComponentDamage == ConsumableEffect.ConsumableEffectNone)
+            if (!Enum.IsDefined(value: consumableComponentDamage))
             {
-                ConsumableComponentDamage = ConsumableEffect.ConsumableEffectNone;
+                ConsumableComponentDamage = ConsumableEffect.ConsumableEffectUndefined;
+            }
+            else
+            {
+                ConsumableComponentDamage = consumableComponentDamage;
+            }
+        }
 
+        public void SetPrototypeComponentClonation(in ConsumableComponent consumableComponentClonation)
+        {
+            if (consumableComponentClonation is null)
+            {
                 return;
             }
 
-            ConsumableComponentDamage = consumableComponentDamage;
+            consumableComponentClonation.SetProductComponentWidth(productComponentWidth: ProductComponentWidth);
+
+            consumableComponentClonation.SetProductComponentHeight(productComponentHeight: ProductComponentHeight);
+
+            consumableComponentClonation.SetProductComponentDepth(productComponentDepth: ProductComponentDepth);
+
+            consumableComponentClonation.SetProductComponentWeight(productComponentWeight: ProductComponentWeight);
+
+            consumableComponentClonation.SetConsumableComponentHealth(consumableComponentHealth: ConsumableComponentHealth);
+
+            consumableComponentClonation.SetConsumableComponentDamage(consumableComponentDamage: ConsumableComponentDamage);
         }
 
-        public override bool Equals(object uncastedConsumableComponent)
+        public override bool Equals(object? uncastedConsumableComponent)
         {
             if (ReferenceEquals(objA: this, objB: uncastedConsumableComponent))
             {
@@ -68,11 +102,6 @@ namespace DesignPatternsProject.Scripts.DesignPatterns.Creational.Prototype
             }
 
             if (uncastedConsumableComponent is not ConsumableComponent castedConsumableComponent)
-            {
-                return false;
-            }
-
-            if (!EqualityComparer<string>.Default.Equals(x: ProductComponentName, y: castedConsumableComponent.ProductComponentName))
             {
                 return false;
             }
@@ -117,8 +146,6 @@ namespace DesignPatternsProject.Scripts.DesignPatterns.Creational.Prototype
 
             int consumableComponentHashCode = ConsumableComponentHashCodeInitialPrime;
 
-            consumableComponentHashCode = HashCode.Combine(value1: ConsumableComponentHashCodeMultiplierPrime ^ consumableComponentHashCode, value2: ProductComponentName);
-
             consumableComponentHashCode = HashCode.Combine(value1: ConsumableComponentHashCodeMultiplierPrime ^ consumableComponentHashCode, value2: ProductComponentWidth);
 
             consumableComponentHashCode = HashCode.Combine(value1: ConsumableComponentHashCodeMultiplierPrime ^ consumableComponentHashCode, value2: ProductComponentHeight);
@@ -140,8 +167,6 @@ namespace DesignPatternsProject.Scripts.DesignPatterns.Creational.Prototype
 
             consumableComponentStringBuilder.Append(value: $"[START]{nameof(ConsumableComponent)}[START]");
             consumableComponentStringBuilder.AppendLine(value: string.Empty);
-            consumableComponentStringBuilder.Append(value: $"{nameof(ProductComponentName)}: {ProductComponentName}");
-            consumableComponentStringBuilder.AppendLine(value: string.Empty);
             consumableComponentStringBuilder.Append(value: $"{nameof(ProductComponentWidth)}: {ProductComponentWidth}");
             consumableComponentStringBuilder.AppendLine(value: string.Empty);
             consumableComponentStringBuilder.Append(value: $"{nameof(ProductComponentHeight)}: {ProductComponentHeight}");
@@ -157,28 +182,6 @@ namespace DesignPatternsProject.Scripts.DesignPatterns.Creational.Prototype
             consumableComponentStringBuilder.Append(value: $"[END]{nameof(ConsumableComponent)}[END]");
 
             return consumableComponentStringBuilder.ToString();
-        }
-
-        public void SetPrototypeComponentClonation(in ConsumableComponent consumableComponentClonation)
-        {
-            if (consumableComponentClonation is null)
-            {
-                return;
-            }
-
-            consumableComponentClonation.SetProductComponentName(productComponentName: ProductComponentName);
-
-            consumableComponentClonation.SetProductComponentWidth(productComponentWidth: ProductComponentWidth);
-
-            consumableComponentClonation.SetProductComponentHeight(productComponentHeight: ProductComponentHeight);
-
-            consumableComponentClonation.SetProductComponentDepth(productComponentDepth: ProductComponentDepth);
-
-            consumableComponentClonation.SetProductComponentWeight(productComponentWeight: ProductComponentWeight);
-
-            consumableComponentClonation.SetConsumableComponentHealth(consumableComponentHealth: ConsumableComponentHealth);
-
-            consumableComponentClonation.SetConsumableComponentDamage(consumableComponentDamage: ConsumableComponentDamage);
         }
     }
 }

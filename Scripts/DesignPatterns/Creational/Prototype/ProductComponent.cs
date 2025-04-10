@@ -1,4 +1,4 @@
-﻿// LAST UPDATED DATE : 28/03/2025
+﻿// LAST UPDATED DATE : 10/04/2025
 
 namespace DesignPatternsProject.Scripts.DesignPatterns.Creational.Prototype
 {
@@ -8,18 +8,16 @@ namespace DesignPatternsProject.Scripts.DesignPatterns.Creational.Prototype
 
     public enum ProductSize : uint
     {
-        ProductSizeNone = 0, ProductSizeSmall = 1, ProductSizeMedium = 2, ProductSizeLarge = 3
+        ProductSizeUndefined = 0, ProductSizeSmall = 1, ProductSizeMedium = 2, ProductSizeLarge = 3
     }
 
     public enum ProductWeight : uint
     {
-        ProductWeightNone = 0, ProductWeightLight = 1, ProductWeightMedium = 2, ProductWeightHeavy = 3
+        ProductWeightUndefined = 0, ProductWeightLight = 1, ProductWeightMedium = 2, ProductWeightHeavy = 3
     }
 
     public abstract class ProductComponent
     {
-        public string ProductComponentName { get; private set; }
-
         public ProductSize ProductComponentWidth { get; private set; }
 
         public ProductSize ProductComponentHeight { get; private set; }
@@ -30,91 +28,103 @@ namespace DesignPatternsProject.Scripts.DesignPatterns.Creational.Prototype
 
         public ProductComponent() : base()
         {
-            SetProductComponentName(productComponentName: nameof(ProductComponentName));
+            ProductComponentWidth = ProductSize.ProductSizeUndefined;
 
-            SetProductComponentWidth(productComponentWidth: ProductSize.ProductSizeNone);
+            ProductComponentHeight = ProductSize.ProductSizeUndefined;
 
-            SetProductComponentHeight(productComponentHeight: ProductSize.ProductSizeNone);
+            ProductComponentDepth = ProductSize.ProductSizeUndefined;
 
-            SetProductComponentDepth(productComponentDepth: ProductSize.ProductSizeNone);
-
-            SetProductComponentWeight(productComponentWeight: ProductWeight.ProductWeightNone);
+            ProductComponentWeight = ProductWeight.ProductWeightUndefined;
         }
 
-        public ProductComponent(in string productComponentName, in ProductSize productComponentWidth, in ProductSize productComponentHeight, in ProductSize productComponentDepth, in ProductWeight productComponentWeight) : base()
+        public ProductComponent(in ProductSize productComponentWidth, in ProductSize productComponentHeight, in ProductSize productComponentDepth, in ProductWeight productComponentWeight) : base()
         {
-            SetProductComponentName(productComponentName: productComponentName);
-
-            SetProductComponentWidth(productComponentWidth: productComponentWidth);
-
-            SetProductComponentHeight(productComponentHeight: productComponentHeight);
-
-            SetProductComponentDepth(productComponentDepth: productComponentDepth);
-
-            SetProductComponentWeight(productComponentWeight: productComponentWeight);
-        }
-
-        public void SetProductComponentName(in string productComponentName)
-        {
-            if (string.IsNullOrEmpty(value: productComponentName) || string.IsNullOrWhiteSpace(value: productComponentName))
+            if (!Enum.IsDefined(value: productComponentWidth))
             {
-                ProductComponentName = $"{nameof(ProductComponentName)}Undefined";
-
-                return;
+                ProductComponentWidth = ProductSize.ProductSizeUndefined;
+            }
+            else
+            {
+                ProductComponentWidth = productComponentWidth;
             }
 
-            ProductComponentName = productComponentName;
+            if (!Enum.IsDefined(value: productComponentHeight))
+            {
+                ProductComponentHeight = ProductSize.ProductSizeUndefined;
+            }
+            else
+            {
+                ProductComponentHeight = productComponentHeight;
+            }
+
+            if (!Enum.IsDefined(value: productComponentDepth))
+            {
+                ProductComponentDepth = ProductSize.ProductSizeUndefined;
+            }
+            else
+            {
+                ProductComponentDepth = productComponentDepth;
+            }
+
+            if (!Enum.IsDefined(value: productComponentWeight))
+            {
+                ProductComponentWeight = ProductWeight.ProductWeightUndefined;
+            }
+            else
+            {
+                ProductComponentWeight = productComponentWeight;
+            }
         }
 
         public void SetProductComponentWidth(in ProductSize productComponentWidth)
         {
-            if (!Enum.IsDefined(value: productComponentWidth) || productComponentWidth == ProductSize.ProductSizeNone)
+            if (!Enum.IsDefined(value: productComponentWidth))
             {
-                ProductComponentWidth = ProductSize.ProductSizeNone;
-
-                return;
+                ProductComponentWidth = ProductSize.ProductSizeUndefined;
             }
-
-            ProductComponentWidth = productComponentWidth;
+            else
+            {
+                ProductComponentWidth = productComponentWidth;
+            }
         }
 
         public void SetProductComponentHeight(in ProductSize productComponentHeight)
         {
-            if (!Enum.IsDefined(value: productComponentHeight) || productComponentHeight == ProductSize.ProductSizeNone)
+            if (!Enum.IsDefined(value: productComponentHeight))
             {
-                ProductComponentHeight = ProductSize.ProductSizeNone;
-
-                return;
+                ProductComponentHeight = ProductSize.ProductSizeUndefined;
             }
-
-            ProductComponentHeight = productComponentHeight;
+            else
+            {
+                ProductComponentHeight = productComponentHeight;
+            }
         }
 
         public void SetProductComponentDepth(in ProductSize productComponentDepth)
         {
-            if (!Enum.IsDefined(value: productComponentDepth) || productComponentDepth == ProductSize.ProductSizeNone)
+            if (!Enum.IsDefined(value: productComponentDepth))
             {
-                ProductComponentDepth = ProductSize.ProductSizeNone;
-
-                return;
+                ProductComponentDepth = ProductSize.ProductSizeUndefined;
             }
-
-            ProductComponentDepth = productComponentDepth;
+            else
+            {
+                ProductComponentDepth = productComponentDepth;
+            }
         }
 
         public void SetProductComponentWeight(in ProductWeight productComponentWeight)
         {
-            if (!Enum.IsDefined(value: productComponentWeight) || productComponentWeight == ProductWeight.ProductWeightNone)
+            if (!Enum.IsDefined(value: productComponentWeight))
             {
-                ProductComponentWeight = ProductWeight.ProductWeightNone;
-
-                return;
+                ProductComponentWeight = ProductWeight.ProductWeightUndefined;
             }
-
-            ProductComponentWeight = productComponentWeight;
+            else
+            {
+                ProductComponentWeight = productComponentWeight;
+            }
         }
 
-        public override bool Equals(object uncastedProductComponent)
+        public override bool Equals(object? uncastedProductComponent)
         {
             if (ReferenceEquals(objA: this, objB: uncastedProductComponent))
             {
@@ -127,11 +137,6 @@ namespace DesignPatternsProject.Scripts.DesignPatterns.Creational.Prototype
             }
 
             if (uncastedProductComponent is not ProductComponent castedProductComponent)
-            {
-                return false;
-            }
-
-            if (!EqualityComparer<string>.Default.Equals(x: ProductComponentName, y: castedProductComponent.ProductComponentName))
             {
                 return false;
             }
@@ -166,8 +171,6 @@ namespace DesignPatternsProject.Scripts.DesignPatterns.Creational.Prototype
 
             int productComponentHashCode = ProductComponentHashCodeInitialPrime;
 
-            productComponentHashCode = HashCode.Combine(value1: ProductComponentHashCodeMultiplierPrime ^ productComponentHashCode, value2: ProductComponentName);
-
             productComponentHashCode = HashCode.Combine(value1: ProductComponentHashCodeMultiplierPrime ^ productComponentHashCode, value2: ProductComponentWidth);
 
             productComponentHashCode = HashCode.Combine(value1: ProductComponentHashCodeMultiplierPrime ^ productComponentHashCode, value2: ProductComponentHeight);
@@ -184,8 +187,6 @@ namespace DesignPatternsProject.Scripts.DesignPatterns.Creational.Prototype
             StringBuilder productComponentStringBuilder = new();
 
             productComponentStringBuilder.Append(value: $"[START]{nameof(ProductComponent)}[START]");
-            productComponentStringBuilder.AppendLine(value: string.Empty);
-            productComponentStringBuilder.Append(value: $"{nameof(ProductComponentName)}: {ProductComponentName}");
             productComponentStringBuilder.AppendLine(value: string.Empty);
             productComponentStringBuilder.Append(value: $"{nameof(ProductComponentWidth)}: {ProductComponentWidth}");
             productComponentStringBuilder.AppendLine(value: string.Empty);

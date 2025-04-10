@@ -1,4 +1,4 @@
-﻿// LAST UPDATED DATE : 28/03/2025
+﻿// LAST UPDATED DATE : 10/04/2025
 
 namespace DesignPatternsProject.Scripts.DesignPatterns.Structural.Composite
 {
@@ -7,15 +7,23 @@ namespace DesignPatternsProject.Scripts.DesignPatterns.Structural.Composite
 
     public sealed class NegationFilter<Template1> : FilterComponent<Template1> where Template1 : class
     {
-        private FilterComponent<Template1> NegationFilterUnary { get; }
-
-        private NegationFilter() : base()
-        {
-
-        }
+        public FilterComponent<Template1> NegationFilterUnary { get; }
 
         public NegationFilter(in FilterComponent<Template1> negationFilterUnary) : base()
         {
+            if (negationFilterUnary is null)
+            {
+                StringBuilder negationFilterStringBuilder = new();
+
+                negationFilterStringBuilder.Append(value: $"[START]{nameof(NegationFilter<Template1>)}[START]");
+                negationFilterStringBuilder.AppendLine(value: string.Empty);
+                negationFilterStringBuilder.Append(value: $"There was an issue in '{nameof(NegationFilter<Template1>)}' class");
+                negationFilterStringBuilder.AppendLine(value: string.Empty);
+                negationFilterStringBuilder.Append(value: $"[END]{nameof(NegationFilter<Template1>)}[END]");
+
+                throw new InvalidOperationException(message: negationFilterStringBuilder.ToString(), innerException: new Exception());
+            }
+
             NegationFilterUnary = negationFilterUnary;
         }
 
@@ -50,7 +58,7 @@ namespace DesignPatternsProject.Scripts.DesignPatterns.Structural.Composite
             return !NegationFilterUnary.CheckFilterComponentField(filterComponentInput: negationFilterInput);
         }
 
-        public override bool Equals(object uncastedNegationFilter)
+        public override bool Equals(object? uncastedNegationFilter)
         {
             StringBuilder negationFilterStringBuilder = new();
 

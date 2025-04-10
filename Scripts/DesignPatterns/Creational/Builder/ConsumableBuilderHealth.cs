@@ -1,4 +1,4 @@
-﻿// LAST UPDATED DATE : 28/03/2025
+﻿// LAST UPDATED DATE : 10/04/2025
 
 namespace DesignPatternsProject.Scripts.DesignPatterns.Creational.Builder
 {
@@ -14,7 +14,7 @@ namespace DesignPatternsProject.Scripts.DesignPatterns.Creational.Builder
 
         public Template1 SetConsumableBuilderHealthInput(in ConsumableEffect consumableBuilderHealthInput)
         {
-            if (ConsumableBuilderOriginInstance is null)
+            if (ConsumableBuilderSourceInstance is null)
             {
                 StringBuilder consumableBuilderHealthStringBuilder = new();
 
@@ -27,12 +27,19 @@ namespace DesignPatternsProject.Scripts.DesignPatterns.Creational.Builder
                 throw new InvalidOperationException(message: consumableBuilderHealthStringBuilder.ToString(), innerException: new Exception());
             }
 
-            ConsumableBuilderOriginInstance.SetConsumableComponentHealth(consumableComponentHealth: consumableBuilderHealthInput);
+            if (!Enum.IsDefined(value: consumableBuilderHealthInput))
+            {
+                ConsumableBuilderSourceInstance.SetConsumableComponentHealth(consumableComponentHealth: ConsumableEffect.ConsumableEffectUndefined);
+            }
+            else
+            {
+                ConsumableBuilderSourceInstance.SetConsumableComponentHealth(consumableComponentHealth: consumableBuilderHealthInput);
+            }
 
             return (Template1)this;
         }
 
-        public override bool Equals(object uncastedConsumableBuilderHealth)
+        public override bool Equals(object? uncastedConsumableBuilderHealth)
         {
             StringBuilder consumableBuilderHealthStringBuilder = new();
 

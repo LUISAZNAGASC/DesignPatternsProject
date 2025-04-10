@@ -1,11 +1,11 @@
-﻿// LAST UPDATED DATE : 28/03/2025
+﻿// LAST UPDATED DATE : 10/04/2025
 
 namespace DesignPatternsProject.Scripts.DesignPatterns.Creational.Builder
 {
     using System;
     using System.Text;
 
-    public class ConsumableBuilderWidth<Template1> : ConsumableBuilderName<ConsumableBuilderWidth<Template1>> where Template1 : ConsumableBuilderWidth<Template1>
+    public class ConsumableBuilderWidth<Template1> : ConsumableBuilderSource<ConsumableBuilderWidth<Template1>> where Template1 : ConsumableBuilderWidth<Template1>
     {
         protected ConsumableBuilderWidth() : base()
         {
@@ -14,7 +14,7 @@ namespace DesignPatternsProject.Scripts.DesignPatterns.Creational.Builder
 
         public Template1 SetConsumableBuilderWidthInput(in ProductSize consumableBuilderWidthInput)
         {
-            if (ConsumableBuilderOriginInstance is null)
+            if (ConsumableBuilderSourceInstance is null)
             {
                 StringBuilder consumableBuilderWidthStringBuilder = new();
 
@@ -27,12 +27,19 @@ namespace DesignPatternsProject.Scripts.DesignPatterns.Creational.Builder
                 throw new InvalidOperationException(message: consumableBuilderWidthStringBuilder.ToString(), innerException: new Exception());
             }
 
-            ConsumableBuilderOriginInstance.SetProductComponentWidth(productComponentWidth: consumableBuilderWidthInput);
+            if (!Enum.IsDefined(value: consumableBuilderWidthInput))
+            {
+                ConsumableBuilderSourceInstance.SetProductComponentWidth(productComponentWidth: ProductSize.ProductSizeUndefined);
+            }
+            else
+            {
+                ConsumableBuilderSourceInstance.SetProductComponentWidth(productComponentWidth: consumableBuilderWidthInput);
+            }
 
             return (Template1)this;
         }
 
-        public override bool Equals(object uncastedConsumableBuilderWidth)
+        public override bool Equals(object? uncastedConsumableBuilderWidth)
         {
             StringBuilder consumableBuilderWidthStringBuilder = new();
 

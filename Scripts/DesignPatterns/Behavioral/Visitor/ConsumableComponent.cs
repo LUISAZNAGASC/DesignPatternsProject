@@ -1,6 +1,6 @@
 ﻿// LAST UPDATED DATE : 10/04/2025
 
-namespace DesignPatternsProject.Scripts.DesignPatterns.Behavioral.Command
+namespace DesignPatternsProject.Scripts.DesignPatterns.Behavioral.Visitor
 {
     using System;
     using System.Collections.Generic;

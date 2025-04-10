@@ -1,4 +1,4 @@
-﻿// LAST UPDATED DATE : 28/03/2025
+﻿// LAST UPDATED DATE : 10/04/2025
 
 namespace DesignPatternsProject.Scripts.DesignPatterns.Behavioral.Memento
 {
@@ -7,26 +7,27 @@ namespace DesignPatternsProject.Scripts.DesignPatterns.Behavioral.Memento
 
     public sealed class MementoComponent<Template1> where Template1 : class
     {
-        private Template1 MementoComponentReference { get; }
-
-        private MementoComponent() : base()
-        {
-
-        }
+        public Template1 MementoComponentReference { get; }
 
         public MementoComponent(in Template1 mementoComponentReference) : base()
         {
+            if (mementoComponentReference is null)
+            {
+                StringBuilder mementoComponentStringBuilder = new();
+
+                mementoComponentStringBuilder.Append(value: $"[START]{nameof(MementoComponent<Template1>)}[START]");
+                mementoComponentStringBuilder.AppendLine(value: string.Empty);
+                mementoComponentStringBuilder.Append(value: $"Method not implemented in '{nameof(MementoComponent<Template1>)}' class");
+                mementoComponentStringBuilder.AppendLine(value: string.Empty);
+                mementoComponentStringBuilder.Append(value: $"[END]{nameof(MementoComponent<Template1>)}[END]");
+
+                throw new NotImplementedException(message: mementoComponentStringBuilder.ToString(), inner: new Exception());
+            }
+
             MementoComponentReference = mementoComponentReference;
         }
 
-        public bool TryMementoComponentReferenceIsNotNull(out Template1 mementoComponentReference)
-        {
-            mementoComponentReference = MementoComponentReference;
-
-            return mementoComponentReference is not null;
-        }
-
-        public override bool Equals(object uncastedMementoComponent)
+        public override bool Equals(object? uncastedMementoComponent)
         {
             StringBuilder mementoComponentStringBuilder = new();
 

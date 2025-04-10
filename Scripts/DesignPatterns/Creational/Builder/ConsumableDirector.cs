@@ -1,4 +1,4 @@
-﻿// LAST UPDATED DATE : 28/03/2025
+﻿// LAST UPDATED DATE : 10/04/2025
 
 namespace DesignPatternsProject.Scripts.DesignPatterns.Creational.Builder
 {
@@ -17,7 +17,7 @@ namespace DesignPatternsProject.Scripts.DesignPatterns.Creational.Builder
             return new ConsumableDirector();
         }
 
-        public override bool Equals(object uncastedConsumableDirector)
+        public override bool Equals(object? uncastedConsumableDirector)
         {
             StringBuilder consumableDirectorStringBuilder = new();
 

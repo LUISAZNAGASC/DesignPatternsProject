@@ -1,4 +1,4 @@
-﻿// LAST UPDATED DATE : 28/03/2025
+﻿// LAST UPDATED DATE : 10/04/2025
 
 namespace DesignPatternsProject.Scripts.DesignPatterns.Behavioral.Command
 {
@@ -11,16 +11,31 @@ namespace DesignPatternsProject.Scripts.DesignPatterns.Behavioral.Command
 
         private ProductSize ConsumableCommandDepthRedoValue { get; }
 
-        private ConsumableCommandDepth() : base()
-        {
-
-        }
-
         public ConsumableCommandDepth(in ConsumableComponent consumableCommandDepthReference, in ProductSize consumableCommandDepthRedoValue) : base(commandComponentReference: consumableCommandDepthReference)
         {
-            ConsumableCommandDepthRedoValue = consumableCommandDepthRedoValue;
+            if (consumableCommandDepthReference is null)
+            {
+                StringBuilder consumableCommandDepthStringBuilder = new();
 
-            ConsumableCommandDepthUndoValue = CommandComponentReference.ProductComponentDepth;
+                consumableCommandDepthStringBuilder.Append(value: $"[START]{nameof(ConsumableCommandDepth)}[START]");
+                consumableCommandDepthStringBuilder.AppendLine(value: string.Empty);
+                consumableCommandDepthStringBuilder.Append(value: $"There was an issue in '{nameof(ConsumableCommandDepth)}' class");
+                consumableCommandDepthStringBuilder.AppendLine(value: string.Empty);
+                consumableCommandDepthStringBuilder.Append(value: $"[END]{nameof(ConsumableCommandDepth)}[END]");
+
+                throw new InvalidOperationException(message: consumableCommandDepthStringBuilder.ToString(), innerException: new Exception());
+            }
+
+            ConsumableCommandDepthUndoValue = consumableCommandDepthReference.ProductComponentDepth;
+
+            if (!Enum.IsDefined(value: consumableCommandDepthRedoValue))
+            {
+                ConsumableCommandDepthRedoValue = ProductSize.ProductSizeUndefined;
+            }
+            else
+            {
+                ConsumableCommandDepthRedoValue = consumableCommandDepthRedoValue;
+            }
         }
 
         public override void ExecuteCommandComponentUndoOperation()
@@ -59,7 +74,7 @@ namespace DesignPatternsProject.Scripts.DesignPatterns.Behavioral.Command
             CommandComponentReference.SetProductComponentDepth(productComponentDepth: ConsumableCommandDepthRedoValue);
         }
 
-        public override bool Equals(object uncastedConsumableCommandDepth)
+        public override bool Equals(object? uncastedConsumableCommandDepth)
         {
             StringBuilder consumableCommandDepthStringBuilder = new();
 

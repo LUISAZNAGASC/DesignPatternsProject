@@ -1,4 +1,4 @@
-﻿// LAST UPDATED DATE : 28/03/2025
+﻿// LAST UPDATED DATE : 10/04/2025
 
 namespace DesignPatternsProject.Scripts.DesignPatterns.Creational.Builder
 {
@@ -12,7 +12,7 @@ namespace DesignPatternsProject.Scripts.DesignPatterns.Creational.Builder
 
         }
 
-        public override bool Equals(object uncastedConsumableBuilderTarget)
+        public override bool Equals(object? uncastedConsumableBuilderTarget)
         {
             StringBuilder consumableBuilderTargetStringBuilder = new();
 

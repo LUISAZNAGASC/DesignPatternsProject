@@ -1,4 +1,4 @@
-﻿// LAST UPDATED DATE : 28/03/2025
+﻿// LAST UPDATED DATE : 10/04/2025
 
 namespace DesignPatternsProject.Scripts.DesignPatterns.Structural.Composite
 {
@@ -7,17 +7,25 @@ namespace DesignPatternsProject.Scripts.DesignPatterns.Structural.Composite
 
     public sealed class ConjunctionFilter<Template1> : FilterComponent<Template1> where Template1 : class
     {
-        private FilterComponent<Template1> ConjunctionFilterLeft { get; }
+        public FilterComponent<Template1> ConjunctionFilterLeft { get; }
 
-        private FilterComponent<Template1> ConjunctionFilterRight { get; }
-
-        private ConjunctionFilter() : base()
-        {
-
-        }
+        public FilterComponent<Template1> ConjunctionFilterRight { get; }
 
         public ConjunctionFilter(in FilterComponent<Template1> conjunctionFilterLeft, in FilterComponent<Template1> conjunctionFilterRight) : base()
         {
+            if (conjunctionFilterLeft is null || conjunctionFilterRight is null)
+            {
+                StringBuilder conjunctionFilterStringBuilder = new();
+
+                conjunctionFilterStringBuilder.Append(value: $"[START]{nameof(ConjunctionFilter<Template1>)}[START]");
+                conjunctionFilterStringBuilder.AppendLine(value: string.Empty);
+                conjunctionFilterStringBuilder.Append(value: $"There was an issue in '{nameof(ConjunctionFilter<Template1>)}' class");
+                conjunctionFilterStringBuilder.AppendLine(value: string.Empty);
+                conjunctionFilterStringBuilder.Append(value: $"[END]{nameof(ConjunctionFilter<Template1>)}[END]");
+
+                throw new InvalidOperationException(message: conjunctionFilterStringBuilder.ToString(), innerException: new Exception());
+            }
+
             ConjunctionFilterLeft = conjunctionFilterLeft;
 
             ConjunctionFilterRight = conjunctionFilterRight;
@@ -64,7 +72,7 @@ namespace DesignPatternsProject.Scripts.DesignPatterns.Structural.Composite
             return true;
         }
 
-        public override bool Equals(object uncastedConjunctionFilter)
+        public override bool Equals(object? uncastedConjunctionFilter)
         {
             StringBuilder conjunctionFilterStringBuilder = new();
 

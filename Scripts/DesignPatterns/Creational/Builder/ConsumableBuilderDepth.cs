@@ -1,4 +1,4 @@
-﻿// LAST UPDATED DATE : 28/03/2025
+﻿// LAST UPDATED DATE : 10/04/2025
 
 namespace DesignPatternsProject.Scripts.DesignPatterns.Creational.Builder
 {
@@ -14,7 +14,7 @@ namespace DesignPatternsProject.Scripts.DesignPatterns.Creational.Builder
 
         public Template1 SetConsumableBuilderDepthInput(in ProductSize consumableBuilderDepthInput)
         {
-            if (ConsumableBuilderOriginInstance is null)
+            if (ConsumableBuilderSourceInstance is null)
             {
                 StringBuilder consumableBuilderDepthStringBuilder = new();
 
@@ -27,12 +27,19 @@ namespace DesignPatternsProject.Scripts.DesignPatterns.Creational.Builder
                 throw new InvalidOperationException(message: consumableBuilderDepthStringBuilder.ToString(), innerException: new Exception());
             }
 
-            ConsumableBuilderOriginInstance.SetProductComponentDepth(productComponentDepth: consumableBuilderDepthInput);
+            if (!Enum.IsDefined(value: consumableBuilderDepthInput))
+            {
+                ConsumableBuilderSourceInstance.SetProductComponentDepth(productComponentDepth: ProductSize.ProductSizeUndefined);
+            }
+            else
+            {
+                ConsumableBuilderSourceInstance.SetProductComponentDepth(productComponentDepth: consumableBuilderDepthInput);
+            }
 
             return (Template1)this;
         }
 
-        public override bool Equals(object uncastedConsumableBuilderDepth)
+        public override bool Equals(object? uncastedConsumableBuilderDepth)
         {
             StringBuilder consumableBuilderDepthStringBuilder = new();
 

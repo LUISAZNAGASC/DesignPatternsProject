@@ -1,4 +1,4 @@
-﻿// LAST UPDATED DATE : 28/03/2025
+﻿// LAST UPDATED DATE : 10/04/2025
 
 namespace DesignPatternsProject.Scripts.DesignPatterns.Behavioral.Memento
 {
@@ -8,19 +8,27 @@ namespace DesignPatternsProject.Scripts.DesignPatterns.Behavioral.Memento
 
     public sealed class MementoCaretaker<Template1> where Template1 : class, IPrototypeComponent<Template1>, new()
     {
-        private OriginatorComponent<Template1> MementoCaretakerOriginatorComponent { get; }
+        private OriginatorComponent<Template1> MementoCaretakerOriginatorComponent { get; } = new OriginatorComponent<Template1>();
 
-        private Stack<MementoComponent<Template1>> MementoCaretakerUndoCollection { get; }
+        private Stack<MementoComponent<Template1>> MementoCaretakerUndoCollection { get; } = new Stack<MementoComponent<Template1>>(collection: []);
 
-        private Stack<MementoComponent<Template1>> MementoCaretakerRedoCollection { get; }
+        private Stack<MementoComponent<Template1>> MementoCaretakerRedoCollection { get; } = new Stack<MementoComponent<Template1>>(collection: []);
 
-        private MementoCaretaker() : base()
+        public MementoCaretaker(in OriginatorComponent<Template1> mementoCaretakerOriginatorComponent) : base()
         {
+            if (mementoCaretakerOriginatorComponent is null)
+            {
+                StringBuilder mementoCaretakerStringBuilder = new();
 
-        }
+                mementoCaretakerStringBuilder.Append(value: $"[START]{nameof(MementoCaretaker<Template1>)}[START]");
+                mementoCaretakerStringBuilder.AppendLine(value: string.Empty);
+                mementoCaretakerStringBuilder.Append(value: $"Method not implemented in '{nameof(MementoCaretaker<Template1>)}' class");
+                mementoCaretakerStringBuilder.AppendLine(value: string.Empty);
+                mementoCaretakerStringBuilder.Append(value: $"[END]{nameof(MementoCaretaker<Template1>)}[END]");
 
-        public MementoCaretaker(in OriginatorComponent<Template1> mementoCaretakerOriginatorComponent)
-        {
+                throw new NotImplementedException(message: mementoCaretakerStringBuilder.ToString(), inner: new Exception());
+            }
+
             MementoCaretakerOriginatorComponent = mementoCaretakerOriginatorComponent;
 
             MementoCaretakerUndoCollection = new Stack<MementoComponent<Template1>>(collection: []);
@@ -89,7 +97,7 @@ namespace DesignPatternsProject.Scripts.DesignPatterns.Behavioral.Memento
                 throw new NotImplementedException(message: mementoCaretakerStringBuilder.ToString(), inner: new Exception());
             }
 
-            if (!MementoCaretakerUndoCollection.TryPop(result: out MementoComponent<Template1> mementoCaretakerMementoComponent))
+            if (!MementoCaretakerUndoCollection.TryPop(result: out MementoComponent<Template1>? mementoCaretakerMementoComponent))
             {
                 return false;
             }
@@ -142,7 +150,7 @@ namespace DesignPatternsProject.Scripts.DesignPatterns.Behavioral.Memento
                 throw new NotImplementedException(message: mementoCaretakerStringBuilder.ToString(), inner: new Exception());
             }
 
-            if (!MementoCaretakerRedoCollection.TryPop(result: out MementoComponent<Template1> mementoCaretakerMementoComponent))
+            if (!MementoCaretakerRedoCollection.TryPop(result: out MementoComponent<Template1>? mementoCaretakerMementoComponent))
             {
                 return false;
             }
@@ -167,7 +175,7 @@ namespace DesignPatternsProject.Scripts.DesignPatterns.Behavioral.Memento
             return true;
         }
 
-        public override bool Equals(object uncastedMementoCaretaker)
+        public override bool Equals(object? uncastedMementoCaretaker)
         {
             StringBuilder mementoCaretakerStringBuilder = new();
 

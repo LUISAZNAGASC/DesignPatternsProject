@@ -1,4 +1,4 @@
-﻿// LAST UPDATED DATE : 28/03/2025
+﻿// LAST UPDATED DATE : 10/04/2025
 
 namespace DesignPatternsProject.Scripts.DesignPatterns.Behavioral.Command
 {
@@ -9,13 +9,21 @@ namespace DesignPatternsProject.Scripts.DesignPatterns.Behavioral.Command
     {
         protected Template1 CommandComponentReference { get; }
 
-        protected CommandComponent() : base()
-        {
-
-        }
-
         protected CommandComponent(in Template1 commandComponentReference) : base()
         {
+            if (commandComponentReference is null)
+            {
+                StringBuilder commandComponentStringBuilder = new();
+
+                commandComponentStringBuilder.Append(value: $"[START]{nameof(CommandComponent<Template1>)}[START]");
+                commandComponentStringBuilder.AppendLine(value: string.Empty);
+                commandComponentStringBuilder.Append(value: $"There was an issue in '{nameof(CommandComponent<Template1>)}' class");
+                commandComponentStringBuilder.AppendLine(value: string.Empty);
+                commandComponentStringBuilder.Append(value: $"[END]{nameof(CommandComponent<Template1>)}[END]");
+
+                throw new InvalidOperationException(message: commandComponentStringBuilder.ToString(), innerException: new Exception());
+            }
+
             CommandComponentReference = commandComponentReference;
         }
 
@@ -23,7 +31,7 @@ namespace DesignPatternsProject.Scripts.DesignPatterns.Behavioral.Command
 
         public abstract void ExecuteCommandComponentRedoOperation();
 
-        public override bool Equals(object uncastedCommandComponent)
+        public override bool Equals(object? uncastedCommandComponent)
         {
             StringBuilder commandComponentStringBuilder = new();
 

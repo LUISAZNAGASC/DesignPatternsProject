@@ -1,4 +1,4 @@
-﻿// LAST UPDATED DATE : 28/03/2025
+﻿// LAST UPDATED DATE : 10/04/2025
 
 namespace DesignPatternsProject.Scripts.DesignPatterns.Structural.Composite
 {
@@ -7,17 +7,25 @@ namespace DesignPatternsProject.Scripts.DesignPatterns.Structural.Composite
 
     public sealed class DisjunctionFilter<Template1> : FilterComponent<Template1> where Template1 : class
     {
-        private FilterComponent<Template1> DisjunctionFilterLeft { get; }
+        public FilterComponent<Template1> DisjunctionFilterLeft { get; }
 
-        private FilterComponent<Template1> DisjunctionFilterRight { get; }
+        public FilterComponent<Template1> DisjunctionFilterRight { get; }
 
-        private DisjunctionFilter() : base()
+        public DisjunctionFilter(in FilterComponent<Template1> disjunctionFilterLeft, in FilterComponent<Template1> disjunctionFilterRight) : base()
         {
+            if (disjunctionFilterLeft is null || disjunctionFilterRight is null)
+            {
+                StringBuilder disjunctionFilterStringBuilder = new();
 
-        }
+                disjunctionFilterStringBuilder.Append(value: $"[START]{nameof(DisjunctionFilter<Template1>)}[START]");
+                disjunctionFilterStringBuilder.AppendLine(value: string.Empty);
+                disjunctionFilterStringBuilder.Append(value: $"There was an issue in '{nameof(DisjunctionFilter<Template1>)}' class");
+                disjunctionFilterStringBuilder.AppendLine(value: string.Empty);
+                disjunctionFilterStringBuilder.Append(value: $"[END]{nameof(DisjunctionFilter<Template1>)}[END]");
 
-        public DisjunctionFilter(in FilterComponent<Template1> disjunctionFilterLeft, in FilterComponent<Template1> disjunctionFilterRight)
-        {
+                throw new InvalidOperationException(message: disjunctionFilterStringBuilder.ToString(), innerException: new Exception());
+            }
+
             DisjunctionFilterLeft = disjunctionFilterLeft;
 
             DisjunctionFilterRight = disjunctionFilterRight;
@@ -64,7 +72,7 @@ namespace DesignPatternsProject.Scripts.DesignPatterns.Structural.Composite
             return false;
         }
 
-        public override bool Equals(object uncastedDisjunctionFilter)
+        public override bool Equals(object? uncastedDisjunctionFilter)
         {
             StringBuilder disjunctionFilterStringBuilder = new();
 

@@ -1,12 +1,12 @@
 ﻿// LAST UPDATED DATE : 10/04/2025
 
-namespace DesignPatternsProject.Scripts.DesignPatterns.Structural.Composite
+namespace DesignPatternsProject.Scripts.DesignPatterns.Behavioral.Visitor
 {
     using System;
     using System.Collections.Generic;
     using System.Text;
 
-    public sealed class ConsumableFilterWidth : FilterComponent<ConsumableComponent>
+    public sealed class ConsumableFilterWidth : FilterComponent<ConsumableComponent, ConsumableFilterVisitor>
     {
         private ProductSize ConsumableFilterWidthField { get; }
 
@@ -38,6 +38,24 @@ namespace DesignPatternsProject.Scripts.DesignPatterns.Structural.Composite
             }
 
             return EqualityComparer<ProductSize>.Default.Equals(x: ConsumableFilterWidthField, y: consumableFilterWidthInput.ProductComponentWidth);
+        }
+
+        public override void AcceptFilterComponent(in ConsumableFilterVisitor consumableFilterWidthVisitor)
+        {
+            if (consumableFilterWidthVisitor is null)
+            {
+                StringBuilder consumableFilterWidthStringBuilder = new();
+
+                consumableFilterWidthStringBuilder.Append(value: $"[START]{nameof(ConsumableFilterWidth)}[START]");
+                consumableFilterWidthStringBuilder.AppendLine(value: string.Empty);
+                consumableFilterWidthStringBuilder.Append(value: $"There was an issue in '{nameof(ConsumableFilterWidth)}' class");
+                consumableFilterWidthStringBuilder.AppendLine(value: string.Empty);
+                consumableFilterWidthStringBuilder.Append(value: $"[END]{nameof(ConsumableFilterWidth)}[END]");
+
+                throw new InvalidOperationException(message: consumableFilterWidthStringBuilder.ToString(), innerException: new Exception());
+            }
+
+            consumableFilterWidthVisitor.ExecuteFilterVisitorOperation(consumableFilterVisitorElement: this);
         }
 
         public override bool Equals(object? uncastedConsumableFilterWidth)

@@ -1,12 +1,12 @@
 ﻿// LAST UPDATED DATE : 10/04/2025
 
-namespace DesignPatternsProject.Scripts.DesignPatterns.Structural.Composite
+namespace DesignPatternsProject.Scripts.DesignPatterns.Behavioral.Visitor
 {
     using System;
     using System.Collections.Generic;
     using System.Text;
 
-    public sealed class ConsumableFilterDepth : FilterComponent<ConsumableComponent>
+    public sealed class ConsumableFilterDepth : FilterComponent<ConsumableComponent, ConsumableFilterVisitor>
     {
         private ProductSize ConsumableFilterDepthField { get; }
 
@@ -38,6 +38,24 @@ namespace DesignPatternsProject.Scripts.DesignPatterns.Structural.Composite
             }
 
             return EqualityComparer<ProductSize>.Default.Equals(x: ConsumableFilterDepthField, y: consumableFilterDepthInput.ProductComponentDepth);
+        }
+
+        public override void AcceptFilterComponent(in ConsumableFilterVisitor consumableFilterDepthVisitor)
+        {
+            if (consumableFilterDepthVisitor is null)
+            {
+                StringBuilder consumableFilterDepthStringBuilder = new();
+
+                consumableFilterDepthStringBuilder.Append(value: $"[START]{nameof(ConsumableFilterDepth)}[START]");
+                consumableFilterDepthStringBuilder.AppendLine(value: string.Empty);
+                consumableFilterDepthStringBuilder.Append(value: $"There was an issue in '{nameof(ConsumableFilterDepth)}' class");
+                consumableFilterDepthStringBuilder.AppendLine(value: string.Empty);
+                consumableFilterDepthStringBuilder.Append(value: $"[END]{nameof(ConsumableFilterDepth)}[END]");
+
+                throw new InvalidOperationException(message: consumableFilterDepthStringBuilder.ToString(), innerException: new Exception());
+            }
+
+            consumableFilterDepthVisitor.ExecuteFilterVisitorOperation(consumableFilterVisitorElement: this);
         }
 
         public override bool Equals(object? uncastedConsumableFilterDepth)

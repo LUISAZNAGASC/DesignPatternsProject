@@ -1,12 +1,12 @@
 ﻿// LAST UPDATED DATE : 10/04/2025
 
-namespace DesignPatternsProject.Scripts.DesignPatterns.Structural.Composite
+namespace DesignPatternsProject.Scripts.DesignPatterns.Behavioral.Visitor
 {
     using System;
     using System.Collections.Generic;
     using System.Text;
 
-    public sealed class ConsumableFilterWeight : FilterComponent<ConsumableComponent>
+    public sealed class ConsumableFilterWeight : FilterComponent<ConsumableComponent, ConsumableFilterVisitor>
     {
         private ProductWeight ConsumableFilterWeightField { get; }
 
@@ -38,6 +38,24 @@ namespace DesignPatternsProject.Scripts.DesignPatterns.Structural.Composite
             }
 
             return EqualityComparer<ProductWeight>.Default.Equals(x: ConsumableFilterWeightField, y: consumableFilterWeightInput.ProductComponentWeight);
+        }
+
+        public override void AcceptFilterComponent(in ConsumableFilterVisitor consumableFilterWeightVisitor)
+        {
+            if (consumableFilterWeightVisitor is null)
+            {
+                StringBuilder consumableFilterWeightStringBuilder = new();
+
+                consumableFilterWeightStringBuilder.Append(value: $"[START]{nameof(ConsumableFilterWeight)}[START]");
+                consumableFilterWeightStringBuilder.AppendLine(value: string.Empty);
+                consumableFilterWeightStringBuilder.Append(value: $"There was an issue in '{nameof(ConsumableFilterWeight)}' class");
+                consumableFilterWeightStringBuilder.AppendLine(value: string.Empty);
+                consumableFilterWeightStringBuilder.Append(value: $"[END]{nameof(ConsumableFilterWeight)}[END]");
+
+                throw new InvalidOperationException(message: consumableFilterWeightStringBuilder.ToString(), innerException: new Exception());
+            }
+
+            consumableFilterWeightVisitor.ExecuteFilterVisitorOperation(consumableFilterVisitorElement: this);
         }
 
         public override bool Equals(object? uncastedConsumableFilterWeight)

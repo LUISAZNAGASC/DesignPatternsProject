@@ -1,4 +1,4 @@
-﻿// LAST UPDATED DATE : 28/03/2025
+﻿// LAST UPDATED DATE : 10/04/2025
 
 namespace DesignPatternsProject.Scripts.DesignPatterns.Behavioral.Iterator
 {
@@ -10,13 +10,21 @@ namespace DesignPatternsProject.Scripts.DesignPatterns.Behavioral.Iterator
     {
         private NodeComponent<Template1> IteratorComponentRoot { get; }
 
-        private IteratorComponent() : base()
-        {
-
-        }
-
         public IteratorComponent(in NodeComponent<Template1> iteratorComponentRoot) : base()
         {
+            if (iteratorComponentRoot is null)
+            {
+                StringBuilder iteratorComponentStringBuilder = new();
+
+                iteratorComponentStringBuilder.Append(value: $"[START]{nameof(IteratorComponent<Template1>)}[START]");
+                iteratorComponentStringBuilder.AppendLine(value: string.Empty);
+                iteratorComponentStringBuilder.Append(value: $"There was an issue in '{nameof(IteratorComponent<Template1>)}' class");
+                iteratorComponentStringBuilder.AppendLine(value: string.Empty);
+                iteratorComponentStringBuilder.Append(value: $"[END]{nameof(IteratorComponent<Template1>)}[END]");
+
+                throw new InvalidOperationException(message: iteratorComponentStringBuilder.ToString(), innerException: new Exception());
+            }
+
             IteratorComponentRoot = iteratorComponentRoot;
         }
 
@@ -31,17 +39,17 @@ namespace DesignPatternsProject.Scripts.DesignPatterns.Behavioral.Iterator
 
                 yield return iteratorComponentCurrent;
 
-                if (iteratorComponentCurrent.TryNodeComponentLeftIsNotNull(nodeComponentLeft: out NodeComponent<Template1> iteratorComponentLeft))
+                if (iteratorComponentCurrent.NodeComponentLeft is not null)
                 {
-                    foreach (NodeComponent<Template1> iteratorComponentChild in GetIteratorComponentPreOrderCollection(iteratorComponentCurrent: iteratorComponentLeft))
+                    foreach (NodeComponent<Template1> iteratorComponentChild in GetIteratorComponentPreOrderCollection(iteratorComponentCurrent: iteratorComponentCurrent.NodeComponentLeft))
                     {
                         yield return iteratorComponentChild;
                     }
                 }
 
-                if (iteratorComponentCurrent.TryNodeComponentRightIsNotNull(nodeComponentRight: out NodeComponent<Template1> iteratorComponentRight))
+                if (iteratorComponentCurrent.NodeComponentRight is not null)
                 {
-                    foreach (NodeComponent<Template1> iteratorComponentChild in GetIteratorComponentPreOrderCollection(iteratorComponentCurrent: iteratorComponentRight))
+                    foreach (NodeComponent<Template1> iteratorComponentChild in GetIteratorComponentPreOrderCollection(iteratorComponentCurrent: iteratorComponentCurrent.NodeComponentRight))
                     {
                         yield return iteratorComponentChild;
                     }
@@ -68,9 +76,9 @@ namespace DesignPatternsProject.Scripts.DesignPatterns.Behavioral.Iterator
                     yield break;
                 }
 
-                if (iteratorComponentCurrent.TryNodeComponentLeftIsNotNull(nodeComponentLeft: out NodeComponent<Template1> iteratorComponentLeft))
+                if (iteratorComponentCurrent.NodeComponentLeft is not null)
                 {
-                    foreach (NodeComponent<Template1> iteratorComponentChild in GetIteratorComponentInOrderCollection(iteratorComponentCurrent: iteratorComponentLeft))
+                    foreach (NodeComponent<Template1> iteratorComponentChild in GetIteratorComponentInOrderCollection(iteratorComponentCurrent: iteratorComponentCurrent.NodeComponentLeft))
                     {
                         yield return iteratorComponentChild;
                     }
@@ -78,9 +86,9 @@ namespace DesignPatternsProject.Scripts.DesignPatterns.Behavioral.Iterator
 
                 yield return iteratorComponentCurrent;
 
-                if (iteratorComponentCurrent.TryNodeComponentRightIsNotNull(nodeComponentRight: out NodeComponent<Template1> iteratorComponentRight))
+                if (iteratorComponentCurrent.NodeComponentRight is not null)
                 {
-                    foreach (NodeComponent<Template1> iteratorComponentChild in GetIteratorComponentInOrderCollection(iteratorComponentCurrent: iteratorComponentRight))
+                    foreach (NodeComponent<Template1> iteratorComponentChild in GetIteratorComponentInOrderCollection(iteratorComponentCurrent: iteratorComponentCurrent.NodeComponentRight))
                     {
                         yield return iteratorComponentChild;
                     }
@@ -107,17 +115,17 @@ namespace DesignPatternsProject.Scripts.DesignPatterns.Behavioral.Iterator
                     yield break;
                 }
 
-                if (iteratorComponentCurrent.TryNodeComponentLeftIsNotNull(nodeComponentLeft: out NodeComponent<Template1> iteratorComponentLeft))
+                if (iteratorComponentCurrent.NodeComponentLeft is not null)
                 {
-                    foreach (NodeComponent<Template1> iteratorComponentChild in GetIteratorComponentPostOrderCollection(iteratorComponentCurrent: iteratorComponentLeft))
+                    foreach (NodeComponent<Template1> iteratorComponentChild in GetIteratorComponentPostOrderCollection(iteratorComponentCurrent: iteratorComponentCurrent.NodeComponentLeft))
                     {
                         yield return iteratorComponentChild;
                     }
                 }
 
-                if (iteratorComponentCurrent.TryNodeComponentRightIsNotNull(nodeComponentRight: out NodeComponent<Template1> iteratorComponentRight))
+                if (iteratorComponentCurrent.NodeComponentRight is not null)
                 {
-                    foreach (NodeComponent<Template1> iteratorComponentChild in GetIteratorComponentPostOrderCollection(iteratorComponentCurrent: iteratorComponentRight))
+                    foreach (NodeComponent<Template1> iteratorComponentChild in GetIteratorComponentPostOrderCollection(iteratorComponentCurrent: iteratorComponentCurrent.NodeComponentRight))
                     {
                         yield return iteratorComponentChild;
                     }
@@ -137,7 +145,7 @@ namespace DesignPatternsProject.Scripts.DesignPatterns.Behavioral.Iterator
             }
         }
 
-        public override bool Equals(object uncastedIteratorComponent)
+        public override bool Equals(object? uncastedIteratorComponent)
         {
             StringBuilder iteratorComponentStringBuilder = new();
 

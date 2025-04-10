@@ -1,4 +1,4 @@
-﻿// LAST UPDATED DATE : 28/03/2025
+﻿// LAST UPDATED DATE : 10/04/2025
 
 namespace DesignPatternsProject.Scripts.DesignPatterns.Behavioral.Command
 {
@@ -11,16 +11,31 @@ namespace DesignPatternsProject.Scripts.DesignPatterns.Behavioral.Command
 
         private ConsumableEffect ConsumableCommandHealthRedoValue { get; }
 
-        private ConsumableCommandHealth() : base()
-        {
-
-        }
-
         public ConsumableCommandHealth(in ConsumableComponent consumableCommandHealthReference, in ConsumableEffect consumableCommandHealthRedoValue) : base(commandComponentReference: consumableCommandHealthReference)
         {
-            ConsumableCommandHealthRedoValue = consumableCommandHealthRedoValue;
+            if (consumableCommandHealthReference is null)
+            {
+                StringBuilder consumableCommandHealthStringBuilder = new();
 
-            ConsumableCommandHealthUndoValue = CommandComponentReference.ConsumableComponentHealth;
+                consumableCommandHealthStringBuilder.Append(value: $"[START]{nameof(ConsumableCommandHealth)}[START]");
+                consumableCommandHealthStringBuilder.AppendLine(value: string.Empty);
+                consumableCommandHealthStringBuilder.Append(value: $"There was an issue in '{nameof(ConsumableCommandHealth)}' class");
+                consumableCommandHealthStringBuilder.AppendLine(value: string.Empty);
+                consumableCommandHealthStringBuilder.Append(value: $"[END]{nameof(ConsumableCommandHealth)}[END]");
+
+                throw new InvalidOperationException(message: consumableCommandHealthStringBuilder.ToString(), innerException: new Exception());
+            }
+
+            ConsumableCommandHealthUndoValue = consumableCommandHealthReference.ConsumableComponentHealth;
+
+            if (!Enum.IsDefined(value: consumableCommandHealthRedoValue))
+            {
+                ConsumableCommandHealthRedoValue = ConsumableEffect.ConsumableEffectUndefined;
+            }
+            else
+            {
+                ConsumableCommandHealthRedoValue = consumableCommandHealthRedoValue;
+            }
         }
 
         public override void ExecuteCommandComponentUndoOperation()
@@ -59,7 +74,7 @@ namespace DesignPatternsProject.Scripts.DesignPatterns.Behavioral.Command
             CommandComponentReference.SetConsumableComponentHealth(consumableComponentHealth: ConsumableCommandHealthRedoValue);
         }
 
-        public override bool Equals(object uncastedConsumableCommandHealth)
+        public override bool Equals(object? uncastedConsumableCommandHealth)
         {
             StringBuilder consumableCommandHealthStringBuilder = new();
 

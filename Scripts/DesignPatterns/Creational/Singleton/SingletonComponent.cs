@@ -1,4 +1,4 @@
-﻿// LAST UPDATED DATE : 28/03/2025
+﻿// LAST UPDATED DATE : 10/04/2025
 
 namespace DesignPatternsProject.Scripts.DesignPatterns.Creational.Singleton
 {
@@ -8,7 +8,7 @@ namespace DesignPatternsProject.Scripts.DesignPatterns.Creational.Singleton
 
     public abstract class SingletonComponent<Template1> where Template1 : SingletonComponent<Template1>, new()
     {
-        private static Lazy<Template1> SingletonComponentInstance { get; set; }
+        private static Lazy<Template1>? SingletonComponentInstance { get; set; }
 
         protected SingletonComponent() : base()
         {
@@ -22,7 +22,7 @@ namespace DesignPatternsProject.Scripts.DesignPatterns.Creational.Singleton
             return SingletonComponentInstance.Value;
         }
 
-        public override bool Equals(object uncastedSingletonComponent)
+        public override bool Equals(object? uncastedSingletonComponent)
         {
             StringBuilder singletonComponentStringBuilder = new();
 
